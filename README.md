@@ -29,7 +29,7 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
       **This is to download testing Mitra library**
 	
 	WINDOWS/MAC:
-		1) check whether `python` command is running from terminal using below command
+		1) check whether `python` command is running from terminal or not, using below command
 			 python --version
 		if it is not running then set environment variables.
 
@@ -43,7 +43,7 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 
 
 	LINUX:
-		1) check whether `python` command is running from terminal using below command
+		1) check whether `python` command is running from terminal or not, using below command
 			 $ python --version
 		if it is not running then set environment variables.
 
