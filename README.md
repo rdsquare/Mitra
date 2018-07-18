@@ -1,7 +1,6 @@
 #                                                 Mitra: Matrix library in python3
 
-##Mitra:
-	Mitra is Matrix library in python for matematical Matrix opertions. It
+Mitra is Matrix library in python for matematical Matrix opertions. It
 	supports python3 and any kind of OS (OS INDEPENDENT). Mitra is using object-
 	oriented approach to solve real world Matrix problem.
 	
@@ -26,8 +25,8 @@
 		 <https://github.com/rdsquare/Mitra-Python-Library.git>
 
 
-##HOW TO INSTALL
-	************************This is to download testing Mitra library***********************************
+#HOW TO INSTALL
+************************This is to download testing Mitra library***********************************
 	
 	WINDOWS/MAC:
 		1) check whether `python` command is running from terminal using below command
