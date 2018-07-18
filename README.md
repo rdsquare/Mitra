@@ -26,7 +26,7 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 
 
 #HOW TO INSTALL
-************************This is to download testing Mitra library***********************************
+      **This is to download testing Mitra library**
 	
 	WINDOWS/MAC:
 		1) check whether `python` command is running from terminal using below command
