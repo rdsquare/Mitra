@@ -50,9 +50,9 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 		2) Install pip on python3
 			 a) Run below commands on terminal:
 				$ wget https://bootstrap.pypa.io/get-pip.py
-				$ python get-pip.py
+				$ sudo python get-pip.py
 				         or
-				$ python3 get-pip.py
+				$ sudo python3 get-pip.py
 
 		3) Type below command on terminal to install Mitra
-		         $ python3 -m pip install --index-url https://test.pypi.org/simple/ Mitra
+		         $ sudo python3 -m pip install --index-url https://test.pypi.org/simple/ Mitra
