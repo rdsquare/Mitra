@@ -1,4 +1,4 @@
-#                                                 Mitra: Matrix library in python3
+#                                                 Mitra:0.0.1 Matrix library in python3
 
 Mitra is Matrix library in python for matematical Matrix opertions. It
 	supports python3 and any kind of OS (OS INDEPENDENT). Mitra is using object-
