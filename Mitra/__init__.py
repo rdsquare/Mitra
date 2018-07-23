@@ -10,6 +10,7 @@ class Matrix:
     
     def insertValues(self):
         'This function take value from user and set it into list in the matrix format'
+        self.__list = list()
         print ("Enter no. of row(s) of matrix: ")
         self._row = int(input()) 
         if self._row == 0:
