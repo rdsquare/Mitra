@@ -10,7 +10,7 @@ class Matrix:
     
     def insertValues(self):
         'This function take value from user and set it into list in the matrix format'
-        self.__list = list()
+        self._list = list()
         print ("Enter no. of row(s) of matrix: ")
         self._row = int(input()) 
         if self._row == 0:
@@ -528,6 +528,7 @@ class SquareMatrix (Matrix):
     'This class is used for Square Matrix manipulation and it is derived from Matrix'
     def insertValues(self):
         'This function takes values of matrix and store it in list'
+	self._list = list()
         print("Enter dimension of square matrix:", ' ')
         self._row = int(input())
         if self._row == 0: 
