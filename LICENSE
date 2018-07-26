@@ -5,7 +5,7 @@
     supports variety of Matrix functions like transpose, inverse etc. Mitra 
     handles the Matrix using class-object functionality.
 
-    Copyright (C) 2018  Rahul Dangi & Som Durgesh Gupta <https://github.com/rdsquare/Mitra-Python-Library.git>
+    Copyright (C) 2018  Mitra <https://github.com/rdsquare/Mitra-Python-Library.git>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
