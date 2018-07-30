@@ -36,7 +36,11 @@ def solveLE(matrix,varList,rtList):
     if len(rtList) != len(varList): 
         raise MatrixDimensionError("dimension of matrix must be equal to the size of rtList.")
     for dig in  range(0, dimList[0]): 
-        for row in range(dig+1, dimList[0]): 
+        for row in range(dig+1, dimList[0]):
+            if matrix[dig][dig] == 0:
+                (matrix[row],matrix[dig]) = (matrix[dig],matrix[row])
+                (rtList[row],rtList[dig]) = (rtList[dig],rtList[row])
+                continue
             kConst = matrix[row][dig] / matrix[dig][dig] 
             for col in range(0, dimList[1]): 
                 matrix[row][col] = matrix[row][col] - (matrix[dig][col] * kConst) 
