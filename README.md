@@ -1,4 +1,4 @@
-#                                                 Mitra:1.0.0 Matrix library in python3
+#                                                 Mitra:1.0.2 Matrix library in python3
 
 Mitra is Matrix library in python for matematical Matrix opertions. It
 	supports python3 and any kind of OS (OS INDEPENDENT). Mitra is using object-
@@ -39,7 +39,7 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 			    get-pip.py file is present.
 
 		3) Type below command on terminal to install Mitra
-		         python3 -m pip install --index-url https://test.pypi.org/simple/ Mitra
+		         pip install Mitra
 
 
 	LINUX:
@@ -55,4 +55,4 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 				$ sudo python3 get-pip.py
 
 		3) Type below command on terminal to install Mitra
-		         $ sudo python3 -m pip install --index-url https://test.pypi.org/simple/ Mitra
+		         $ pip install Mitra
