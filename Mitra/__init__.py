@@ -522,13 +522,313 @@ class Matrix:
         'This function will return True if matrix is square matrix otherwise return false.'
         if self._row == self._col:
             return True 
-        return False 
+        return False
+
+    def _absMax(self):
+        '_absMax() to find absolute maximum value in matrix'
+        maximum = 0
+        for i in range(self._row):
+            for j in range(self._col):
+                value = abs(self._list[i][j]) #change vale to absolute value
+                if value > maximum:
+                    maximum = value
+        return maximum
+
+    def toList(self):
+        'toList() to convert Matrix or SquareMatrix object into list() object'
+        toList = []
+        for i in self._list:
+            tempList = []
+            for j in i:
+                tempList.append(j)
+            toList.append(tempList)
+        return toList
+    
+    def luDecomposition(self):
+        '_LUDecomposition() is used to factorize the square matrix'
+        umatrix = SquareMatrix() # initializing U matrix
+        umatrix.setDimension(self._row)
+        for i in range(self._row):
+            for _ in range(self._row):
+                umatrix[i][_] = self[i][_]
+        for dig in  range(0, umatrix._row):
+            for row in range(dig+1, umatrix._col):
+                if umatrix[dig][dig] == 0:
+                    (umatrix[row],umatrix[dig]) = (umatrix[dig],umatrix[row])
+                    continue
+                kConst = umatrix[row][dig] / umatrix[dig][dig] 
+                for col in range(0, self._row): 
+                    umatrix[row][col] = umatrix[row][col] - (umatrix[dig][col] * kConst)
+        lmatrix = self * umatrix.inverse()
+        aList = [lmatrix.toList(), umatrix.toList()]
+        return aList
+
+    def iPowerMethod(self, digit=4, showIter=False):
+        'iPowerMethod(int, bool) to find smallest eigen value of square matrix.'
+        '''This function is using inverse power method to calculate inverse power
+           method and LU Decomposition of matrix. '''
+        #digit must be in range from 4 to 20
+        if (self._row == 0): 
+            return None
+        if self._row != self._col: 
+            raise NoSquareMatrixError("matrix is not square matrix")
+        if not(isinstance(digit, int)):
+            raise MatrixValueError("digit is int type only")
+        if (self._row == 1):
+            eigenDict = {}
+            eigenVector = []
+            eigenVector.append(self._list[0][0])
+            eigenDict[self._list[0][0]] = self._list[0][0]
+            return eigenDict
+        if (digit < 4) or (digit > 20): 
+            digit=4
+        tolString = "0."
+        for _ in range(digit-1):  #converting digit to tolerance - string format
+            tolString += "0"
+        tolString += "1"
+        tol = float(tolString) #converting tolerance to float type for calculation
+        xlist = [1] * self._row #initial vector list consists of all 1's
+        tempxlist = self.gaussElimination(xlist) #getting new list of vectors by gauss elimination method
+        isSame = True
+        for _ in range(0, self._row-1):#checking if obtained resultant contain all the same eigen vector or not
+            if tempxlist[_] != tempxlist[_+1]:
+                isSame = False
+                break
+        if isSame: #if resultant contain all the same value then replace last '1' with '0'
+            xlist[self._row-1] = 0
+            tempxlist = self.gaussElimination(xlist)
+        xlist = tempxlist[::]
+        eigenBuffer2 = max(xlist)
+        mn = min(xlist)
+        if abs(mn) > abs(eigenBuffer2):
+            eigenBuffer2 = mn
+        eigenBuffer1 = 0 #empty eigen value buffer
+        for _ in range(self._row):
+            xlist[_] /= eigenBuffer2
+        count  = 1
+        if showIter:
+            print("\n\nITERATION",count,"\n")
+            count += 1
+            print("Dominant Eigen Value:",eigenBuffer2)
+            print("\nEigen Vecors:")
+            for _ in range(self._row):
+                print("\t",xlist[_])
+            print()
+        while True:
+            xlist = self.gaussElimination(xlist)
+            tempBuffer = eigenBuffer1
+            eigenBuffer1 = eigenBuffer2 #shifting the eigen value to previous buffer
+            eigenBuffer2 = max(xlist)
+            mn = min(xlist)
+            if abs(mn) > abs(eigenBuffer2):
+                eigenBuffer2 = mn
+            tempxlist = xlist[::]
+            for _ in range(self._row):
+                tempxlist[_] /= eigenBuffer2
+            sameAgain = False
+            for i in range(self._row-1):
+                for j in range(i+1,self._row):
+                    if xlist[i] == xlist[j]:
+                        sameAgain = True
+                        break
+                if sameAgain:
+                    break
+                
+            if sameAgain:
+                for _ in range(self._row):
+                    eigenBuffer2 = 0-eigenBuffer2
+                    tempxlist[_] /= eigenBuffer2
+            xlist = tempxlist[::]
+            error = abs(eigenBuffer2-eigenBuffer1)
+            if showIter:
+                print("\n\nITERATION",count,"\n")
+                count += 1
+                print("Dominant Eigen Value:",eigenBuffer2)
+                print("\nEigen Vecors for Dominant Eigen Value:")
+                for _ in range(self._row):
+                    print("\t",xlist[_])
+                print()
+            if error < tol:
+                break
+        eigenDict = {}
+        eigenDict[eigenBuffer2] = xlist #eigenBuffer2 will be dominant eigen value for given matrix
+        return eigenDict
+
+    def powerMethod(self, digit=4, showIter=False):
+        'powerMethod(int, bool) to find dominant eigen value of square matrix.'
+        #digit must be in range from 4 to 20
+        if (self._row == 0): 
+            return None
+        if self._row != self._col: 
+            raise NoSquareMatrixError("matrix is not square matrix")
+        if not(isinstance(digit, int)):
+            raise MatrixValueError("digit is int type only")
+        if (self._row == 1):
+            eigenDict = {}
+            eigenVector = []
+            eigenVector.append(self._list[0][0])
+            eigenDict[self._list[0][0]] = self._list[0][0]
+            return eigenDict
+        if (digit < 4) or (digit > 20): 
+            digit=4
+        tolString = "0."
+        for _ in range(digit-1):  #converting digit to tolerance - string format
+            tolString += "0"
+        tolString += "1"
+        tol = float(tolString) #converting tolerance to float type for calculation
+        resultant = Matrix() #matrix contain initially taken eigen vector for dominant eigen value
+        resultant.setDimension(self._row,1)
+        for _ in range(self._row):
+            resultant[_] = [1]
+        tempResult = self*resultant
+        isSame = True
+        for _ in range (0, self._row-1): #checking if obtained resultant contain all the same eigen vector or not
+            if tempResult[_] != tempResult[_+1]:
+                isSame = False
+                break
+        if isSame: #if resultant contain all same value then replace last '1' with '0'
+            resultant[self._row-1] = [0]
+            rempResult = self*resultant
+        resultant = tempResult
+        eigenBuffer2 = resultant._absMax()
+        eigenBuffer1 = 0 #empty eigen value buffer
+        for _ in range(self._row):
+            resultant[_][0] /= eigenBuffer2
+        count = 1
+        if showIter:
+            print("\n\nITERATION",count,"\n")
+            count += 1
+            print("Dominant Eigen Value:",eigenBuffer2)
+            print("\nEigen Vecors:")
+            for _ in range(self._row):
+                print("\t",resultant[_][0])
+            print()
+        while True:
+            resultant = self * resultant
+            eigenBuffer1 = eigenBuffer2 #shifting the eigen value to previous buffer
+            eigenBuffer2 = resultant._absMax()
+            tempResult = resultant
+            for _ in range(self._row):
+                tempResult[_][0] /= eigenBuffer2
+            sameAgain = True
+            for _ in range (0, self._row-1): #checking if obtained resultant contain all the same eigen vector or not
+                if tempResult[_] != tempResult[_+1]:
+                    sameAgain = False
+                    break
+            if sameAgain:
+                for _ in range(self._row):
+                    eigenBuffer2 = 0-eigenBuffer2
+                    tempResult[_][0] /= eigenBuffer2
+            resultant = tempResult
+            error = abs(eigenBuffer2-eigenBuffer1)
+            if showIter:
+                print("\n\nITERATION",count,"\n")
+                count += 1
+                print("Dominant Eigen Value:",eigenBuffer2)
+                print("\nEigen Vecors for Dominant Eigen Value:")
+                for _ in range(self._row):
+                    print("\t",resultant[_][0])
+                print()
+            if error < tol:
+                break
+        eigenDict = {}
+        eigenVector = []
+        for _ in range(self._row):
+            eigenVector.append(resultant[_][0])
+        eigenDict[eigenBuffer2] = eigenVector #eigenBuffer2 will be dominant eigen value for given matrix
+        print("inverse = ", 1/eigenBuffer2)
+        return eigenDict
+
+    def gaussElimination(self, rgtList):
+        'gaussElimination( list ) to perform gauss elimination on matrix.'
+        rtList = rgtList[::]
+        if self.isEmpty():
+            raise EmptyMatrixError("system of linear equations must contains one equation.")
+        if not(self.isSquareMatrix()):
+            raise NoSquareMatrixError("matrix must be square matrix to solve system of linear equations.")
+        if isinstance(rtList, list):
+            for every in range(0, len(rtList)): 
+                if not(isinstance(rtList[every], (int, float))): 
+                    raise ValueError("right hand side value(s) of equaton(s) must be int or float type only.")
+        else: 
+            raise ValueError("rtList must be of list type.")
+        if len(rtList) != self._row: 
+            raise MatrixDimensionError("dimension of matrix must be equal to the size of rtList.")
+        matrix = self.toList()
+        for dig in  range(0, self._row): 
+            for row in range(dig+1, self._row):
+                if matrix[dig][dig] == 0:
+                    (matrix[row],matrix[dig]) = (matrix[dig],matrix[row])
+                    (rtList[row],rtList[dig]) = (rtList[dig],rtList[row])
+                    continue
+                kConst = matrix[row][dig] / matrix[dig][dig] 
+                for col in range(0, self._row): 
+                    matrix[row][col] = matrix[row][col] - (matrix[dig][col] * kConst) 
+                rtList[row] = rtList[row] - (rtList[dig] * kConst)
+        ansList = [] 
+        for row in range(0, self._row): 
+            if row == 0: 
+                ansList.append(rtList[self._row-1] / matrix[self._row-1][self._row-1])
+            else:
+                for col in range(0, row+1): 
+                    if col == row: 
+                        ansList.append(rtList[self._row-1-row] / matrix[self._row-1-row][self._row-1-col])
+                    else: 
+                        rtList[self._row-1-row] = rtList[self._row-1-row] - (matrix[self._row-1-row][self._row-1-col] * ansList[col])
+        return ansList[::-1]
+
+    def _detfunc(self,value):
+        '_detfun(float) to calculae det(A - YI), wher Y is value and I is identity matrix with dimension same to A'
+        matrix = self - (self.__getIdentityMat(self._row,self._col) * value)
+        return matrix.determinant()
+
+    def _bisection(self,maxValue, minValue, tol):
+        '_bisection(float,float, float) to calculate the roots of the polynomial function between range of max and min values'
+        if (self._detfunc(maxValue) * self._detfunc(minValue)) > 0:
+            return []
+        iteration = 0
+        nmidValue = 0
+        while iteration<10000:
+            nmidValue = (maxValue+minValue)/2
+            fof = self._detfunc(nmidValue)
+            if fof < 0:
+                maxValue = nmidValue
+            elif fof > 0:
+                minValue = nmidValue
+            else:
+                return [nmidValue]
+            iteration+= 1
+        return [nmidValue]
+
+    def eigenValues(self, digit=4, partition=1000):
+        'eigenValues(int, int) to calculate all the eigenvalues of the square matrix.'
+        if (digit < 4) or (digit > 20): 
+            digit=4
+        tolString = "0."
+        for _ in range(digit-1):  #converting digit to tolerance - string format
+            tolString += "0"
+        tolString += "1"
+        tol = float(tolString) #converting tolerance to float type for calculation
+        eigenValues = []
+        eigenDict = self.inverse().iPowerMethod()
+        upper = 0
+        lower = 0
+        for i in eigenDict.keys():
+            upper = abs(i) #calculating dominant eigenValue using inverse power method (alternative of power method).
+        upper += 1
+        lower = 0 - upper #calculating eigenValues in the range -value <= eigenValue <= value
+        height = abs((upper-lower)/partition)
+        for i in range(partition):
+            tempeigen = self._bisection((lower+height*i), lower+(height*(i+1)), tol)
+            if len(tempeigen) > 0:
+                eigenValues.append(tempeigen[0])
+        return eigenValues
 
 class SquareMatrix (Matrix):
     'This class is used for Square Matrix manipulation and it is derived from Matrix'
     def insertValues(self):
         'This function takes values of matrix and store it in list'
-	self._list = list()
+        self._list = list()
         print("Enter dimension of square matrix:", ' ')
         self._row = int(input())
         if self._row == 0: 
