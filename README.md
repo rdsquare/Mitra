@@ -3,6 +3,8 @@
 Mitra is Matrix library in python for matematical Matrix opertions. It
 	supports python3 and any kind of OS (OS INDEPENDENT). Mitra is using object-
 	oriented approach to solve real world Matrix problem.
+
+There is also provided help document for the Mitra so you can get help about using Mitra in your python code.
 	
 	
 	SOME RESTRICTIONS:
