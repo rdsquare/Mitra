@@ -56,3 +56,5 @@ Mitra is Matrix library in python for matematical Matrix opertions. It
 
 		3) Type below command on terminal to install Mitra
 		         $ pip install Mitra
+
+### Developed by: Rahul Dangi (RD_Square)
